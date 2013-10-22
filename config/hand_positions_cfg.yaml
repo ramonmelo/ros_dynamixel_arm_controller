@@ -1,0 +1,5 @@
+initial_pos:
+    base_to_torso: 0.0
+    torso_to_bone: 0.0
+    bone_to_hand: 0.0
+    hand_to_grip: 0.0
