@@ -3,11 +3,15 @@
 import rospy
 import yaml
 
+from time import time
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64
 
 hand_positions = None
+hand_mapping = None
 hand_joints = {}
+
+joint_publisher = None
 
 def remap_cfg(data):
 
@@ -18,38 +22,83 @@ def remap_cfg(data):
 
 	return cfg
 
-def set_angle(to, angle):
-	global hand_joints
-
-	hand_joints[to].publish( Float64( angle ) )
-
 def callback(data):
 
 	config = remap_cfg(data)
 
-	if ( hand_to_grip != None ):
-		set_angle("hand_to_grip", -config["hand_to_grip"])
+	set_angle("hand_to_grip", config["hand_to_grip"])
 
-	if ( bone_to_hand1 != None and bone_to_hand2 != None ):
+	set_angle("bone_to_hand1", config["bone_to_hand"])
+	set_angle("bone_to_hand2", -config["bone_to_hand"])
 
-		set_angle("bone_to_hand1", config["bone_to_hand"])
-		set_angle("bone_to_hand2", -config["bone_to_hand"])
+def set_angle(to, angle):
+	global hand_joints
+	global hand_mapping
+
+	if to in hand_mapping:
+		for motor in hand_mapping[to]:
+
+			value = -angle if "-" in motor else angle
+			motor = motor.replace("-", "")
+
+			if motor in hand_joints:
+				hand_joints[motor].publish( Float64( value ) )
+
+def update_state( current_position ):
+	global hand_positions
+
+	if current_position in hand_positions:
+		for joint, angle in hand_positions[ current_position ].items():
+
+			rospy.loginfo("%s:%f", joint, angle)
+
+			set_angle( joint, angle )
+
+def update_joints( current_position ):
+	global hand_positions
+	global joint_publisher
+
+	if current_position in hand_positions:
+
+		state = JointState()
+
+		state.name = []
+		state.position = []
+
+		for joint, angle in hand_positions[ current_position ].items():
+
+			state.name.append( joint )
+			state.position.append( angle )
+
+		joint_publisher.publish( state )
 
 def listener():
 
 	global hand_positions
 	global hand_joints
+	global hand_mapping
+	global joint_publisher
 
 	rospy.init_node("hand_publisher")
-	rospy.Subscriber("joint_states", JointState, callback)
 
-	hand_joints["hand_to_grip"] = rospy.Publisher("/hand_to_grip/command", Float64)
-	hand_joints["bone_to_hand1"] = rospy.Publisher("/bone_to_hand1/command", Float64)
-	hand_joints["bone_to_hand2"] = rospy.Publisher("/bone_to_hand2/command", Float64)
+	joint_publisher = rospy.Publisher("/hand_joint_states", JointState)
 
 	hand_positions = rospy.get_param("~hand_positions")
+	hand_mapping = rospy.get_param("~hand_mapping")
 
-	rospy.spin()
+	for joint, motor_list in hand_mapping.items():
+		for motor in motor_list:
+			motor = motor.replace("-", "")
+			hand_joints[motor] = rospy.Publisher("/%s/command" % motor, Float64)
+
+	rate = rospy.Rate(10)
+	while not rospy.is_shutdown():
+		current_position = rospy.get_param("~hand_current_position")
+
+		update_state( current_position )
+		update_joints( current_position )
+
+		rate.sleep()
 
 if __name__ == '__main__':
 	listener()

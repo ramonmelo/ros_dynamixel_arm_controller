@@ -1,5 +1,28 @@
+# File describing possible positions of the arm
+# Safe Limits
+# grip: [0..1]
+# base: [1..2]
+# base_to_bone: [-2..0]
+# bone_to_hand: [-2..2]
+# hand_to_grip: [-1.57..1.57]
+
 initial_pos:
-    base_to_torso: 0.0
-    torso_to_bone: 0.0
-    bone_to_hand: 0.0
-    hand_to_grip: 0.0
+    grip: 0
+    base: 1.57
+    base_to_bone: -2
+    bone_to_hand: -2
+    hand_to_grip: 0
+close_grip:
+    grip: 1
+release_grip:
+    grip: 0
+extend_hand:
+    base: 1.57
+    base_to_bone: 0
+    bone_to_hand: 0
+    hand_to_grip: 1.57
+to_grap:
+    base: 1.57
+    base_to_bone: -1
+    bone_to_hand: -1.57
+    hand_to_grip: 0

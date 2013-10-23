@@ -221,7 +221,7 @@
 
 	<!-- Joints -->
 
-	<joint name="base_to_torso" type="revolute">
+	<joint name="base" type="revolute">
 		<parent link="base"/>
 		<child link="torso"/>
 
@@ -231,7 +231,7 @@
 		<axis xyz="0 0 1"/>
 	</joint>
 
-	<joint name="torso_to_bone" type="revolute">
+	<joint name="base_to_bone" type="revolute">
 		<parent link="torso"/>
 		<child link="bone"/>
 
