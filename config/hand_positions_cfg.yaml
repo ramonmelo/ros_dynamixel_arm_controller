@@ -6,11 +6,17 @@
 # bone_to_hand: [-2..2]
 # hand_to_grip: [-1.57..1.57]
 
+zeros:
+    grip: 0
+    base: 0
+    base_to_bone: 0
+    bone_to_hand: 0
+    hand_to_grip: 0
 initial_pos:
     grip: 0
-    base: 1.57
-    base_to_bone: -2
-    bone_to_hand: -2
+    base: 1
+    base_to_bone: -1.57
+    bone_to_hand: -1.57
     hand_to_grip: 0
 close_grip:
     grip: 1
