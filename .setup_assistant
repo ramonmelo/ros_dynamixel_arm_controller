@@ -1,0 +1,8 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: dynamixel_arm_controller
+    relative_path: urdf/dynamixel.urdf
+  SRDF:
+    relative_path: config/arm.srdf
+  CONFIG:
+    generated_timestamp: 1382566055

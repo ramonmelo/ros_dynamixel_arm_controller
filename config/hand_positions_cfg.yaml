@@ -2,24 +2,18 @@
 # Safe Limits
 # grip: [0..1]
 # base: [1..2]
-# base_to_bone: [-2..0]
+# base_to_bone: [0..-2]
 # bone_to_hand: [-2..2]
 # hand_to_grip: [-1.57..1.57]
 
-zeros:
-    grip: 0
-    base: 0
-    base_to_bone: 0
-    bone_to_hand: 0
-    hand_to_grip: 0
 initial_pos:
-    grip: 0
-    base: 1
-    base_to_bone: -1.57
-    bone_to_hand: -1.57
+    grip: 1.4
+    base: 1.57
+    base_to_bone: 2
+    bone_to_hand: -2
     hand_to_grip: 0
 close_grip:
-    grip: 1
+    grip: 1.3
 release_grip:
     grip: 0
 extend_hand:
@@ -29,6 +23,10 @@ extend_hand:
     hand_to_grip: 1.57
 to_grap:
     base: 1.57
-    base_to_bone: -1
+    base_to_bone: 1
     bone_to_hand: -1.57
     hand_to_grip: 0
+giro1:
+    hand_to_grip: 1.57
+giro2:
+    hand_to_grip: -1.57

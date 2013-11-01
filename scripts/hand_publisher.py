@@ -23,13 +23,8 @@ def remap_cfg(data):
 	return cfg
 
 def callback(data):
-
-	config = remap_cfg(data)
-
-	set_angle("hand_to_grip", config["hand_to_grip"])
-
-	set_angle("bone_to_hand1", config["bone_to_hand"])
-	set_angle("bone_to_hand2", -config["bone_to_hand"])
+	for i, name in enumerate( data.name ):
+		set_angle( name, data.position[i] )
 
 def set_angle(to, angle):
 	global hand_joints
@@ -80,6 +75,8 @@ def listener():
 	global joint_publisher
 
 	rospy.init_node("hand_publisher")
+
+	# rospy.Subscriber("/joint_states", JointState, callback)
 
 	joint_publisher = rospy.Publisher("/hand_joint_states", JointState)
 

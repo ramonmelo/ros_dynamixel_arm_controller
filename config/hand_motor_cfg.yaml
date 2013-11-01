@@ -16,7 +16,7 @@ hand_to_grip:
         module: joint_position_controller
         type: JointPositionController
     joint_name: hand_to_grip
-    joint_speed: 1
+    joint_speed: 4
     motor:
         id: 6
         init: 512
